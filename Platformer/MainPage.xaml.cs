@@ -160,7 +160,7 @@ namespace Platformer
                     try
                     {
                         var feed = (IDictionary<String, object>)ex.GetResultData();
-                        GlobalContext.g_UserProfile.Name = feed["name"].ToString().Replace("Rajasthani", "Panchal");
+                        GlobalContext.g_UserProfile.Name = feed["name"].ToString();
                         GlobalContext.g_UserProfile.UserID = feed["id"].ToString();
                         GlobalContext.g_UserProfile.Picture = (String)((IDictionary<String, object>)((IDictionary<String, object>)feed["picture"])["data"])["url"];
                         // GlobalContext.g_UserProfile.Picture = picture.data.url;

@@ -54,7 +54,6 @@ namespace Platformer.App42
                 if (value != _sendername)
                 {
                     _sendername = value;
-                    _sendername = _sendername.Replace("Rajasthani", "Panchal");
                     NotifyPropertyChanged("SenderName");
                 }
             }

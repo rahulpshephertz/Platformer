@@ -71,7 +71,6 @@ namespace Platformer.App42
                 if (value != _username)
                 {
                     _username = value;
-                    _username= _username.Replace("Rajasthani", "Panchal");
                     NotifyPropertyChanged("UserName");
                 }
             }

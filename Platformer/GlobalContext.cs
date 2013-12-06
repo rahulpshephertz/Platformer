@@ -28,23 +28,7 @@ namespace Platformer
     public class UserProfile
     {
         public string UserID;
-       // private string _name;
         public string Name;
-        //{
-        //    get
-        //    {
-        //        return _name;
-        //    }
-        //    set
-        //    {
-        //        if (value != _name)
-        //        {
-        //            _name = value;
-        //            _name = _name.Replace("Rajasthani", "Panchal");
-        //            NotifyPropertyChanged("Name");
-        //        }
-        //    }
-        //}
         public string Picture;
         public int Score;
         public int Rank;
