@@ -11,8 +11,8 @@ namespace Platformer
 {
     public class GlobalContext
     {
-        public static String API_KEY = "";
-        public static String SECRET_KEY = "";
+        public static String API_KEY = "Your Api key";
+        public static String SECRET_KEY = "Your Secret key";
         public static ServiceAPI SERVICE_API = null;
         public static String AccessToken = null;
         public static String facebookAppId = "1412246962345063";
