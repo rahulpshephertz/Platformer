@@ -1,0 +1,304 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="Platformer.ScoreBoard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="480"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Landscape"  Orientation="Landscape"
+    shell:SystemTray.IsVisible="False">
+	<phone:PhoneApplicationPage.Resources>
+		<Style x:Key="ItemsPresenterStyle1" TargetType="ItemsPresenter"/>
+		<Style x:Key="ListBoxStyle1" TargetType="ListBox">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
+			<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+			<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ListBox">
+						<ScrollViewer x:Name="ScrollViewer" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="ValidationStates"/>
+							</VisualStateManager.VisualStateGroups>
+							<ItemsPresenter Style="{StaticResource ItemsPresenterStyle1}"/>
+						</ScrollViewer>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="ListBoxItemStyle1" TargetType="ListBoxItem">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			<Setter Property="VerticalContentAlignment" Value="Top"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ListBoxItem">
+						<Border x:Name="LayoutRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualState x:Name="Normal">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.Background)" Storyboard.TargetName="ContentContainer">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Null}"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="MouseOver">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Control.Background)" Storyboard.TargetName="ContentContainer">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Null}">
+												</DiscreteObjectKeyFrame>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Disabled">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="LayoutRoot">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource TransparentBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<DoubleAnimation Duration="0" To=".5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ContentContainer"/>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+								<VisualStateGroup x:Name="SelectionStates">
+									<VisualState x:Name="Unselected"/>
+									<VisualState x:Name="Selected">
+									</VisualState>
+								</VisualStateGroup>
+								<VisualStateGroup x:Name="FocusStates"/>
+							</VisualStateManager.VisualStateGroups>
+							<ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot">
+    	<Grid.Background>
+    		<ImageBrush Stretch="Fill" ImageSource="/Images/background.png"/>
+    	</Grid.Background>
+        <Grid Background="Black" Opacity="0.3"></Grid>
+        <!--Pivot Control-->
+        <controls:Pivot Title="PLATFORMER">
+            <!--Pivot item one-->
+            <controls:PivotItem Header="highscores"  Margin="0">
+                <Grid Margin="18,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Name="subHeadersHighScores" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="0">
+                        <Border Background="DarkGray" CornerRadius="10" Name="btnFriendsHighScore" Tap="subHeadersHighScores_btnTap" Tag="0">
+                            <TextBlock Text="Friends" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                        </Border>
+                        <Border Background="Brown" CornerRadius="10" Margin="5,0,5,0" Name="btnGlobalHighScore" Tap="subHeadersHighScores_btnTap" Tag="1">
+                            <TextBlock Text="Global" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                        </Border>
+                    </StackPanel>
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="1" Name="grdContentHighScores">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Name="grdContentHeadersHighScore" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Border Background="Orange" Grid.Column="0" Name="tblRankHighscores" Tap="subHeadersHighScores_btnTap" Tag="0">
+                                <TextBlock Text="Rank" Margin="25,5,25,5" FontSize="22" ></TextBlock>
+                            </Border>
+                            <Border Background="Orange"  Margin="5,0,0,0" Grid.Column="1" Name="tblNameHighscores" Tap="subHeadersHighScores_btnTap" Tag="1">
+                                <TextBlock Text="Name" Margin="85,5,85,5" FontSize="22"></TextBlock>
+                            </Border>
+                            <Border Background="Orange"  Margin="5,0,0,0" Grid.Column="2" Name="tblScoreHighscores" Tap="subHeadersHighScores_btnTap" Tag="1">
+                                <TextBlock Text="Score" Margin="45,5,45,5" FontSize="22"></TextBlock>
+                            </Border>
+                            <Border Background="Orange"  Margin="5,0,5,0" Grid.Column="3" Name="tblSendMessageChallenge" Tap="subHeadersHighScores_btnTap" Tag="1">
+                                <TextBlock Text="Send Messages" Margin="45,5,45,5" FontSize="22"></TextBlock>
+                            </Border>
+                        </Grid>
+                        <ListBox Grid.Row="1" Name="lbxFriendsScore" Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{StaticResource ListBoxStyle1}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                             
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Rank}" Width="90" Margin="10,0,0,0" FontSize="22" Grid.Column="0" TextAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding UserName}"  Width="230" Margin="10,0,0,0" FontSize="22"  Grid.Column="1" TextAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding Score}" Width="130" Margin="10,0,0,0" FontSize="22"  Grid.Column="2" TextAlignment="Center"></TextBlock>
+                                        <Border Background="Brown" HorizontalAlignment="Center" CornerRadius="10" Margin="70,0,0,0" Name="btnSendMessage" Tap="btnSendMessage_Tap" Tag="{Binding}" Grid.Column="3">
+                                            <TextBlock Text="Message" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                                        </Border>
+                                        <!--<Border Background="Brown" CornerRadius="10" Margin="5,0,5,0" Name="btnSendChallenges" Tap="btnSendChallenges_Tap" Tag="{Binding UserId}" Grid.Column="4">
+                                            <TextBlock Text="Challenge" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                                        </Border>-->
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <ListBox Grid.Row="1" Name="lbxGlobalScore" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{StaticResource ListBoxStyle1}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Rank}" Width="90" Margin="10,0,0,0" FontSize="22" Grid.Column="0" TextAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding UserName}"  Width="210" Margin="10,0,0,0" FontSize="22"  Grid.Column="1" TextAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding Score}" Width="130" Margin="10,0,0,0" FontSize="22"  Grid.Column="2" TextAlignment="Center"></TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Grid x:Name="lbxFriendsScoreMessagePopup" Visibility="Visible"  Margin="50,100,0,0"  Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Rectangle RadiusX="10" RadiusY="10" Fill="Black" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
+                            <TextBlock x:Name="lbxFriendsScoremessageTB" MaxWidth="350" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" FontWeight="Bold" />
+                        </Grid>
+                        <Grid x:Name="lbxGlobalScoreMessagePopup" Visibility="Visible"  Margin="50,100,0,0" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Rectangle RadiusX="10" RadiusY="10" Fill="Black" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
+                            <TextBlock x:Name="lbxGlobalScoremessageTB" MaxWidth="350" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" FontWeight="Bold" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </controls:PivotItem>
+            <!--Pivot item two-->
+            <!--<controls:PivotItem Header="redeem rewards"  Margin="0">
+                <Grid Margin="18,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Height="300" Width="370" Background="WhiteSmoke" Margin="5,10,5,10" CornerRadius="20" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.6" BorderBrush="Brown" BorderThickness="5">
+                    </Border>
+                    <Grid Grid.Column="0" Height="300" Width="370" Margin="5,10,5,10" VerticalAlignment="Center" HorizontalAlignment="Center"></Grid>
+                    <Border Grid.Column="1" Height="300" Width="370" Background="WhiteSmoke" Margin="10" CornerRadius="20" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.6" BorderBrush="Brown" BorderThickness="5">
+                    </Border>
+                    <Grid Grid.Column="1" Height="300" Width="370" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center"></Grid>
+                </Grid>
+            </controls:PivotItem>-->
+            <controls:PivotItem Header="messages" Margin="0">
+                <Grid Margin="18,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="300" MinWidth="700">
+                    <!--<StackPanel Name="subHeadersMyProfile" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="0">
+                        <Border Background="DarkGray" CornerRadius="10" Name="btnFriendsMyProfile" Tag="0" Tap="subHeadersMyProfile_btnTap">
+                            <TextBlock Text="friends" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                        </Border>
+                        <Border Background="Brown" CornerRadius="10" Margin="5,0,5,0" Name="btnMessagesMyProfile" Tag="1" Tap="subHeadersMyProfile_btnTap">
+                            <TextBlock Text="messages|challenges" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                        </Border>
+                    </StackPanel>
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="1" Name="grdContentMyProfile">
+                        <ListBox Grid.Row="1" Name="lbxFriendsMyProfile" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{StaticResource ListBoxStyle1}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                   <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+                                        <Grid  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Icon}" Width="100" Height="90" Margin="10,0,0,0" Grid.Column="0" />
+                                        <TextBlock Text="{Binding UserName}" VerticalAlignment="Top"  Width="350" Margin="10,0,0,0" FontSize="24"  Grid.Column="1" TextAlignment="Left" FontWeight="SemiBold"></TextBlock>
+                                        <Border Background="Brown"  VerticalAlignment="Center" CornerRadius="10" Margin="10,0,0,0" Name="btnInviteMyProfile" Tap="btnInviteMyProfile_Tap" Tag="{Binding UserId}" Grid.Column="2">
+                                            <TextBlock Text="Invite" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                                        </Border>
+                                    </Grid>
+                                    <Image Source="/Images/HorizontalDivider.png" HorizontalAlignment="Center" Grid.Column="0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>-->
+                        <ListBox Grid.Row="1" Name="lbxMessageMyProfile" Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{StaticResource ListBoxStyle1}" ItemContainerStyle="{StaticResource ListBoxItemStyle1}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+                                    <Grid  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Icon}" Width="100" Height="90" Margin="10,0,0,0" Grid.Column="0" />
+                                        <StackPanel  Width="350" Margin="10,0,0,0"  Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top">
+                                         <TextBlock Text="{Binding SenderName}"  Width="350" FontSize="24"  Grid.Column="1" TextAlignment="Left" FontWeight="SemiBold" VerticalAlignment="Top"></TextBlock>
+                                         <TextBlock Text="{Binding Message}"  Width="350" FontSize="22"  Grid.Column="1" TextAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                                        </StackPanel>
+                                         <Border Background="Brown" CornerRadius="10" VerticalAlignment="Center" Margin="10,0,0,0" Name="btnDeleteMyProfile" Tap="btnDeleteMyProfile_Tap" Tag="{Binding}" Grid.Column="2">
+                                         <TextBlock Text="Delete" Margin="25,5,25,5" FontSize="22"></TextBlock>
+                                        </Border>
+                                    </Grid>
+                                        <Image Source="/Images/HorizontalDivider.png" HorizontalAlignment="Center" Grid.Column="0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <!--<Grid x:Name="lbxFriendsMyProfileMessagePopup" Visibility="Visible"   Width="350" Height="60"  Margin="200,100,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Rectangle RadiusX="10" RadiusY="10" Fill="Black"  Width="350" Height="60"  HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
+                            <TextBlock x:Name="lbxFriendsMyProfilemessageTB" MaxWidth="440" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" FontWeight="Bold" />
+                        </Grid>-->
+                        <Grid x:Name="lbxMessageMyProfileMessagePopup" Visibility="Visible"  Width="350" Height="60"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Rectangle RadiusX="10" RadiusY="10" Fill="Black" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
+                            <TextBlock x:Name="lbxMessageMyProfileMessageTB" MaxWidth="340" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" FontWeight="Bold" />
+                        </Grid>
+                    </Grid>
+                <!--</Grid>-->
+            </controls:PivotItem>
+        </controls:Pivot>
+        <Grid  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,2,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Image Name="imgProfile" Source="=" Width="70" Height="70" Margin="0,0,0,0" Grid.Column="0" />
+            <StackPanel  Width="250" Margin="10,0,0,0"  Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top">
+                <TextBlock Name="tblProfileName" Text="Rahul Panchal"  Width="250" FontSize="24"  Grid.Column="1" TextAlignment="Left" FontWeight="SemiBold" VerticalAlignment="Top"></TextBlock>
+                <StackPanel  Width="250" Margin="0,0,0,0"  Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                    <TextBlock Name="tblProfileScore"  Text="Score:3345" FontSize="22"  Grid.Column="1" TextAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Name="tblProfileRank" Text="Rank:230" Margin="5,0,0,0" FontSize="22"  Grid.Column="1" TextAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Name="messagePopup" Height="250" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed">
+        <Border  CornerRadius="10" BorderBrush="Green" Height="250" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Background="WhiteSmoke" Opacity="0.5">
+        </Border>
+            <TextBlock Name="tblToMessage" VerticalAlignment="Top" Foreground="Black" Text="To :Rahul Panchal" Margin="10,5,0,0"></TextBlock>
+            <TextBox Name="tbxMessage" Height="150" VerticalAlignment="Top" Foreground="Black" Margin="0,25,0,0"></TextBox>
+            <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,10">
+                <!--Create a single button to navigate to the second page which is rendered with the XNA Framework-->
+                <Button Height="50" Width="150" Margin="0" Content="cancel" Click="Button_Click" Tag="0" Style="{StaticResource FormsButtonWithoutBorder}" Background="Black"/>
+                <Button Height="50" Width="150" Margin="20,0,0,0" Content="send" Click="Button_Click" Tag="1" Style="{StaticResource FormsButtonWithoutBorder}" Background="Black" />
+            </StackPanel>
+            <Grid x:Name="sendMessagePopup" Visibility="Collapsed"  Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Rectangle RadiusX="10" RadiusY="10" Fill="Black" Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
+                <TextBlock x:Name="sendMessagePopupTB" MaxWidth="340" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
+            </Grid>
+        </Grid>
+    </Grid>
+    
+</phone:PhoneApplicationPage>
