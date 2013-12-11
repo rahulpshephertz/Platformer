@@ -18,15 +18,15 @@ namespace Platformer.App42
         private static StorageService mStorageService = null;
         public delegate void App42ApiResultCallback(object response, bool isException);
 
-        //public static void LinkUserFacebookAccount(SocialApiResultCallback callBack)
-        //{
-        //    SocialCallback _sCallback = new SocialCallback(callBack);
-        //    if (mSocialService == null)
-        //    {
-        //        mSocialService = GlobalContext.SERVICE_API.BuildSocialService();
-        //    }
-        //    mSocialService.LinkUserFacebookAccount(GlobalContext.Username,GlobalContext.AccessToken,_sCallback);
-        //}
+        public static void LinkUserFacebookAccount(App42ApiResultCallback callBack)
+        {
+            App42ApiCallback _sCallback = new App42ApiCallback(callBack);
+            if (mSocialService == null)
+            {
+                mSocialService = GlobalContext.SERVICE_API.BuildSocialService();
+            }
+            mSocialService.LinkUserFacebookAccount(GlobalContext.g_UserProfile.UserID, GlobalContext.AccessToken, _sCallback);
+        }
         public static void GetFacebookProfile(App42ApiResultCallback callBack)
         {
             App42ApiCallback _sCallback = new App42ApiCallback(callBack);
@@ -36,6 +36,7 @@ namespace Platformer.App42
             }
             mSocialService.GetFacebookProfile(GlobalContext.AccessToken, _sCallback);
         }
+       
         public static void GetFacebookFriendsFromLinkUser(App42ApiResultCallback callBack)
         {
             try
@@ -167,7 +168,6 @@ namespace Platformer.App42
             {
                 MessageBox.Show(e.Message);
             }
-
         }
         public static void GetMessages(App42ApiResultCallback requestCallback)
         {
@@ -184,7 +184,6 @@ namespace Platformer.App42
             {
                 MessageBox.Show(e.Message);
             }
-
         }
         public static void DeleteMessage(String messageID, App42ApiResultCallback requestCallback)
         {
@@ -201,7 +200,22 @@ namespace Platformer.App42
             {
                 MessageBox.Show(e.Message);
             }
-
+        }
+        public static void ShareStatus(String message, App42ApiResultCallback requestCallback)
+        {
+            try
+            {
+                App42ApiCallback _sCallback = new App42ApiCallback(requestCallback);
+                if (mSocialService == null)
+                {
+                    mSocialService = GlobalContext.SERVICE_API.BuildSocialService();
+                }
+                mSocialService.UpdateFacebookStatus(GlobalContext.g_UserProfile.UserID,message, _sCallback);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         public class App42ApiCallback : App42Callback
         {

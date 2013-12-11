@@ -17,6 +17,7 @@ using System.IO;
 using com.shephertz.app42.paas.sdk.windows;
 using System.Windows.Threading;
 using Platformer.App42;
+using com.shephertz.app42.paas.sdk.windows.social;
 
 namespace Platformer
 {
@@ -203,7 +204,6 @@ namespace Platformer
 
                 }
             }
-
             wasContinuePressed = continuePressed;
         }
 
@@ -306,9 +306,22 @@ namespace Platformer
                         LoadNextLevel();
                     break;
                 case 1:
+                    messageTB.Text = "Please wait...";
+                    MessagePopup.Visibility = Visibility.Visible;
                     App42Api.SaveUserScore(GlobalContext.totalScore, SaveScoreCallback);
                     break;
-
+                case 2:
+                    if (GlobalContext.isFacebookAccountLinkedToApp42)
+                    {
+                        messageTB.Text = "Please wait...";
+                        MessagePopup.Visibility = Visibility.Visible;
+                        App42Api.ShareStatus("Hey!! I have scored " + GlobalContext.totalScore + " on Platformer.Check out this on marketplace" + string.Format("http://www.windowsphone.com/s?appid={0}", App.GetId()), ShareScoreCallback);
+                    }
+                    else
+                    {
+                        showMessage("Sorry!!you have to do logout and get logged in again");
+                    }
+                        break;
             }
             //  MessageBox.Show("Submit Score");
         }
@@ -326,6 +339,26 @@ namespace Platformer
                 if (game.IsResponseSuccess())
                 {
                     showMessage("Score Saved Successfully");
+                }
+                else
+                {
+                    showMessage("Error,Please try again later");
+                }
+            }
+        }
+        private void ShareScoreCallback(object response, bool IsException)
+        {
+            if (IsException)
+            {
+                App42Exception exception = (App42Exception)response;
+                showMessage("Exception,Please try again later");
+            }
+            else
+            {
+                Social social = (Social)response;
+                if (social.IsResponseSuccess())
+                {
+                    showMessage("Score Shared Successfully");
                 }
                 else
                 {

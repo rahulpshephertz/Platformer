@@ -87,7 +87,6 @@
 			</Setter>
 		</Style>
 	</phone:PhoneApplicationPage.Resources>
-
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
     	<Grid.Background>
@@ -176,11 +175,11 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Grid x:Name="lbxFriendsScoreMessagePopup" Visibility="Visible"  Margin="50,100,0,0"  Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid x:Name="lbxFriendsScoreMessagePopup" Grid.Row="1" Visibility="Visible"  Margin="50,80,0,0"  Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Rectangle RadiusX="10" RadiusY="10" Fill="Black" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
                             <TextBlock x:Name="lbxFriendsScoremessageTB" MaxWidth="350" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" FontWeight="Bold" />
                         </Grid>
-                        <Grid x:Name="lbxGlobalScoreMessagePopup" Visibility="Visible"  Margin="50,100,0,0" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid x:Name="lbxGlobalScoreMessagePopup" Grid.Row="1" Visibility="Visible"  Margin="50,80,0,0" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Rectangle RadiusX="10" RadiusY="10" Fill="Black" Width="350" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
                             <TextBlock x:Name="lbxGlobalScoremessageTB" MaxWidth="350" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" FontWeight="Bold" />
                         </Grid>
@@ -258,6 +257,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                    <Button Height="45" Width="120" Margin="0,-20,40,0" VerticalAlignment="Top" HorizontalAlignment="Right" Name="btnRefresh" Content="refresh" Click="btnRefresh_Click_1" Tag="1" Style="{StaticResource FormsButtonWithoutBorder}" Background="Black" />
                         <!--<Grid x:Name="lbxFriendsMyProfileMessagePopup" Visibility="Visible"   Width="350" Height="60"  Margin="200,100,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Rectangle RadiusX="10" RadiusY="10" Fill="Black"  Width="350" Height="60"  HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.7" />
                             <TextBlock x:Name="lbxFriendsMyProfilemessageTB" MaxWidth="440" Text="Please Wait.." TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" FontWeight="Bold" />
@@ -270,10 +270,11 @@
                 <!--</Grid>-->
             </controls:PivotItem>
         </controls:Pivot>
-        <Grid  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,2,0,0">
+        <Grid  VerticalAlignment="Top" HorizontalAlignment="Center" Margin="200,2,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Image Name="imgProfile" Source="=" Width="70" Height="70" Margin="0,0,0,0" Grid.Column="0" />
             <StackPanel  Width="250" Margin="10,0,0,0"  Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top">
@@ -283,6 +284,7 @@
                     <TextBlock Name="tblProfileRank" Text="Rank:230" Margin="5,0,0,0" FontSize="22"  Grid.Column="1" TextAlignment="Left" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
             </StackPanel>
+            <Button Height="45" Width="120" Margin="20,0,0,0" Grid.Column="2" Content="logout" Click="Logout_Click" Tag="1" Style="{StaticResource FormsButtonWithoutBorder}" Background="Black" />
         </Grid>
         <Grid Name="messagePopup" Height="250" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed">
         <Border  CornerRadius="10" BorderBrush="Green" Height="250" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Background="WhiteSmoke" Opacity="0.5">

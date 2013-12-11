@@ -147,7 +147,6 @@ namespace Platformer
                 // user cancelled
                 MessageBox.Show(oauthResult.ErrorDescription);
             }
-
         }
         // My facebook feed.
         internal void MyProfile()
@@ -166,7 +165,7 @@ namespace Platformer
                         // GlobalContext.g_UserProfile.Picture = picture.data.url;
                         DBManager.getInstance().saveData(DBManager.DB_Profile, GlobalContext.g_UserProfile);
                         Deployment.Current.Dispatcher.BeginInvoke(delegate(){
-                            NavigationService.Navigate(new Uri(_Uri, UriKind.Relative));
+                            App42Api.LinkUserFacebookAccount(LinkUserFacebookCallback);
                         });
                     }
                     catch (Exception e)
@@ -174,10 +173,39 @@ namespace Platformer
                         MessageBox.Show(e.Message);
                     }
                 };
-
             var parameters = new Dictionary<String, object>();
             parameters["fields"] = "id,name,picture";
             fb.GetAsync("me", parameters);
+        }
+        private void LinkUserFacebookCallback(object response,bool IsException)
+        {
+            if (IsException)
+            {
+                App42Exception exception = (App42Exception)response;
+            }
+            else
+            {
+                Social social = (Social)response;
+                if (social.IsResponseSuccess())
+                {
+                    GlobalContext.isFacebookAccountLinkedToApp42 = true;
+                }
+                else
+                {
+                    GlobalContext.isFacebookAccountLinkedToApp42 = false; 
+                }
+            }
+            if (IsolatedStorageSettings.ApplicationSettings.Contains("IsLinkedToFacebook"))
+            {
+                IsolatedStorageSettings.ApplicationSettings["IsLinkedToFacebook"] = GlobalContext.isFacebookAccountLinkedToApp42;
+                IsolatedStorageSettings.ApplicationSettings.Save();
+            }
+            else
+            {
+                IsolatedStorageSettings.ApplicationSettings.Add("IsLinkedToFacebook", GlobalContext.isFacebookAccountLinkedToApp42);
+                IsolatedStorageSettings.ApplicationSettings.Save();
+            }
+            NavigationService.Navigate(new Uri(_Uri, UriKind.Relative));
         }
         void imgClose_Tap(object sender, RoutedEventArgs e)
         {

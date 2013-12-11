@@ -11,7 +11,7 @@ namespace Platformer
 {
     public class GlobalContext
     {
-        public static String API_KEY = "Your Api key";
+        public static String API_KEY = "Your Api Key";
         public static String SECRET_KEY = "Your Secret key";
         public static ServiceAPI SERVICE_API = null;
         public static String AccessToken = null;

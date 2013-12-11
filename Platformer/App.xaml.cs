@@ -22,7 +22,7 @@ using com.shephertz.app42.paas.sdk.windows;
 using System.Text;
 using System.IO.IsolatedStorage;
 using Platformer.App42;
-
+using System.Xml.Linq;
 namespace Platformer
 {
     public partial class App : Application
@@ -107,8 +107,7 @@ namespace Platformer
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             GlobalContext.SERVICE_API = new ServiceAPI(GlobalContext.API_KEY, GlobalContext.SECRET_KEY);
-          
-            //GlobalContext.SERVICE_API.SetBaseURL("http://", "192.168.1.34", 8082);
+            //GlobalContext.SERVICE_API.SetBaseURL("http://", "192.168.1.26", 8082);
         }
 
         // Code to execute when the application is activated (brought to foreground)
@@ -242,6 +241,16 @@ namespace Platformer
         public static MemoryStream GenerateStreamFromString(string value)
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(value));
+        }
+        public static Guid GetId()
+        {
+            Guid applicationId = Guid.Empty;
+
+            var productId = XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("ProductID");
+
+            if (productId != null && !string.IsNullOrEmpty(productId.Value))
+                Guid.TryParse(productId.Value, out applicationId);
+            return applicationId;
         }
         #endregion
     }

@@ -22,6 +22,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using com.shephertz.app42.paas.sdk.windows.storage;
+using Facebook;
 
 namespace Platformer
 {
@@ -376,6 +377,70 @@ namespace Platformer
             lbxMessageMyProfileMessagePopup.Visibility = Visibility.Collapsed;
             sendMessagePopup.Visibility = Visibility.Collapsed;
             (sender as DispatcherTimer).Stop();
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            lbxMessageMyProfileMessageTB.Text = lbxGlobalScoremessageTB.Text = lbxFriendsScoremessageTB.Text = "Please wait...";
+            lbxGlobalScoreMessagePopup.Visibility = Visibility.Visible;
+            lbxFriendsScoreMessagePopup.Visibility = Visibility.Visible;
+            lbxMessageMyProfileMessagePopup.Visibility=Visibility.Visible;
+            var fb = new FacebookClient();
+            var parameters = new Dictionary<String, object>();
+            parameters["next"] = "https://www.facebook.com/connect/login_success.html";
+            parameters["access_token"] = GlobalContext.AccessToken;
+            var logouturl=fb.GetLogoutUrl(parameters);
+            var webBrowser = new WebBrowser();
+            webBrowser.Navigated += (o, args) =>
+            {
+                if (args.Uri.AbsoluteUri == "https://www.facebook.com/connect/login_success.html") 
+                {
+                    GlobalContext.AccessToken = null;
+                    GlobalContext.g_UserProfile = null;
+                    Deployment.Current.Dispatcher.BeginInvoke(delegate()
+                    {
+                        DBManager.getInstance().cleanData(DBManager.DB_Profile);
+                        NavigationService.GoBack();
+                    });
+                }
+                else
+                {
+                    Deployment.Current.Dispatcher.BeginInvoke(delegate()
+                    {
+                        MessageBox.Show("Error,Please try again later", "Error",MessageBoxButton.OK);
+                    });
+                }
+                lbxGlobalScoreMessagePopup.Visibility = Visibility.Collapsed;
+                lbxFriendsScoreMessagePopup.Visibility = Visibility.Collapsed;
+                lbxMessageMyProfileMessagePopup.Visibility = Visibility.Collapsed;
+            };
+            webBrowser.Navigate(logouturl);
+        }
+        //public Uri GetLogoutUri()
+        //{
+        //    var sessionkey = ExtractSessionKeyFromAccessToken(GlobalContext.AccessToken);
+        //    var url = String.Format("http://facebook.com/logout.php?app_key={0}&session_key={1}&next={2}",GlobalContext.facebookAppId, sessionkey, EndpointData.FacebookLogoutCallbackUrl);
+        //    webBrowser.Navigate(new Uri(String.Format("https://www.facebook.com/logout.php?next={0}&access_token={1}", getLoginUrl(), AccessToken)));
+        //    return new Uri(url);
+        //}
+        private static string ExtractSessionKeyFromAccessToken(string accessToken)
+        {
+            if (!String.IsNullOrEmpty(accessToken))
+            {
+                var parts = accessToken.Split('|');
+                if (parts.Length > 2)
+                {
+                    return parts[1];
+                }
+            }
+            return String.Empty;
+        }
+
+        private void btnRefresh_Click_1(object sender, RoutedEventArgs e)
+        {
+            lbxMessageMyProfileMessagePopup.Visibility = Visibility.Visible;
+            lbxMessageMyProfileMessageTB.Text = "Please wait...";
+            App42Api.GetMessages(GetMessagesCallback);
         }
         //private void subHeadersMyProfile_btnTap(object sender, GestureEventArgs e)
         //{
